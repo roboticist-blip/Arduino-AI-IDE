@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  arduino-ai-ide:
+    build: .
+    image: arduino-ai-ide:latest
+    container_name: arduino-ai-ide
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      # Optional: set a server-side API key so users don't need to provide their own
+      # - ANTHROPIC_API_KEY=sk-ant-your-key-here
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
